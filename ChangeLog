@@ -1,0 +1,293 @@
+--- 2.1.1 release ---
+
+2011-03-06  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_context.c (giGetEnumValue): Adapted to support new constants.
+	* gi.h: Added macro GI_VERSION_2_1
+
+
+--- 2.1.0 release ---
+
+2011-02-26  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_image.h (GIImage): Added field sub_data.
+	* gi_image.c: Adapted to use and update sub-image pointer.
+	* gi_sampler.c: Adapted to use sub-image pointer.
+
+2011-02-25  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_image.h: Changed function GIImage_border_to_image into 
+	  GIImage_border_pixel:
+	* gi_image.h (GIImage): Added fields sub_width, sub_height, offset_x, 
+	  offset_y and pixel_size.
+	* gi_context.h: Added constants GI_SUBIMAGE_X, GI_SUBIMAGE_Y, 
+	  GI_SUBIMAGE_WIDTH, GI_SUBIMAGE_HEIGHT and GI_SUBIMAGE and 
+	  function giSubImage.
+	* gi_image.c: Adapted to support image sub-rectangles.
+	* gi_sampler.c: Adapted to support image sub-rectangles.
+	* gi_gl.c (giGLDrawGIM): Adapted to support image sub-rectangles.
+
+2011-02-22  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cutter.h (GICutter): Added field iterations.
+	* gi_gi.h: Added constants GI_CATMULL_CLARK_SUBDIVISION and 
+	  GI_SUBDIVISION_ITERATIONS.
+	* gi_context.c: Added retrieval code for new constants.
+	* gi_cutter.c: Added code for setting new cutter parameters.
+
+2011-02-20  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cutter.h: Added functions GICutter_sort_faces and 
+	  GICutter_catmull_clark.
+	* gi_cutter.c (GICutter_sort_faces): Added function for sorting faces into 
+	patches by region growing.
+	* gi_cutter.c (GICutter_face_clustering): Adapted to use new function.
+	* gi_cutter.c (GICutter_catmull_clark): Added function for Catmull-Clark 
+	  subdivision and quadrangular patchification.
+	* gi_mesh.h (GIMesh): Added field old_coords.
+
+2011-02-18  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cutter.h: Added function GICutter_straighten_paths.
+	* gi_cutter.c (GICutter_straighten_paths): Added function for 
+	straightening of ct paths.
+	* gi_cutter.c (GICutter_face_clustering): Adapted to use new function.
+
+2011-02-17  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cutter.h (GICutter): Added fields straighten_paths, orientation_weight 
+	  and shape_weight.
+	* gi.h: Added constants GI_STRAIGHTEN_CUT, GI_FACE_CLUSTERING, 
+	  GI_ORIENTATION_WEIGHT and GI_SHAPE_WEIGHT and functions giCutterParameterb 
+	  and giCutterParameterf.
+	* gi_cutter.c (giCutterParameterb): Added function for setting boolean 
+	  cutting parameters.
+	* gi_cutter.c (giCutterParameterf): Added function for setting floating 
+	  point cutting parameters.
+	* gi_context.c: Added retrieval code for new constants.
+	* gi_cutter.h: Renamed GICutter_from_patchification to GICutter_create_params.
+
+2011-02-15  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cutter.h: Added functions GICutter_from_patchification and 
+	  GICutter_face_clustering.
+	* gi_cutter.h (GICutter): Added fields orientation_weight and shape_weight.
+	* gi_cutter.c (GICutter_from_patchification): Added function for extracting 
+	  cut from existing patchification.
+	* gi_cutter.c (GICutter_from_params): Adapted to use new function.
+	* gi_cutter.c (GICutter_face_clustering): Added function for 
+	  patchification by face clustering.
+
+2011-02-14  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_numerics.h: Added functions GImat3d_tridiagonalize and GImat3d_ql.
+	* gi_numerics.c (GImat3d_tridiagonalize): Added function for 
+	  tridiagonalization of symmetric 3x3-matrix.
+	* gi_numerics.c (GImat3d_ql): Added function for QL algorithm on 3x3-matrix.
+	* gi_multiresolution.h: Added functions GIMultiresolution_face_clustering 
+	  and GIClusterMerge_error, removed function GIFaceCluster_construct.
+	* gi_multiresolution.c (GIMultiresolution_face_clustering): Added function 
+	  for hierarchical face clustering algorithm.
+	* gi_multiresolution.c (GIClusterMerge_error): Added function for computing 
+	  error of cluster merge operation.
+
+2011-02-10  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cutter.c (GICutter_initial_gim): Added computation of edge distances 
+	  to old cut path.
+
+2011-02-08  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cutter.c (GICutter_initial_gim): Changed A* to Dijkstra in 
+	  preparation for more complex edge weights.
+
+
+--- 2.0.2 release ---
+
+2011-01-28  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_memory.c (GIFixedAllocator_allocate): Fixed bug in adjustment of 
+	  pointer to first free chunk.
+
+2011-01-27  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_mesh.h (GIMesh): Removed boundary_hedges field.
+	* gi_mesh.c: Adapted to headless boundary lists.
+
+2011-01-25  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_image.c (GIImage_set_data): Set gl_format of 1 comp. image to GL_RED.
+	* gi_sampler.c (GISampler_sample_software): Fixed texture RG handling.
+	* gi_sampler.c (GISampler_sample_opengl): Fixed texture RG handling.
+
+2011-01-24  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_sampler.c (GISampler_sample_software): Fixed bug in image zippering.
+
+2011-01-21  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_memory.h (GIFixedAllocator): Added next field for dynamic list.
+	* gi_memory.h (GISmallObjectAllocator): Changed pool field to allocs list.
+	* gi_memory.c: Changed fixed allocator array of small object allocator to 
+	  dynamic list with move front heuristic.
+	* gi_sampler.c (GISampler_rasterize_triangle): Fixed normalize condition.
+
+2011-01-20  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_mesh.h: Changed GIMesh_reverse_splits to GIMesh_revert_splits.
+	* gi_cutter.h: Changed GIPatch_reverse_splits to GIPatch_revert_splits.
+	* gi_mesh.h: Added GIHalfEdge_revert_half_split to remove new faces.
+
+2011-01-19  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_mesh.h: Moved halfedge storage into edge.
+	* gi_mesh.c: Adapted to new halfedge storage.
+
+2011-01-17  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_mesh.h: Removed function GIFace_flip.
+	* gi_mesh.c: Removed function GIFace_flip.
+	* gi_mesh.h (GIMesh): Added list boundary_hedges.
+	* gi_mesh.c: Adapted to boundary halfedges.
+	* gi_parameterizer.c (giParameterize): Fixed param sourcing from position.
+	* gi_parameterizer.c: Adapted to boundary halfedges.
+	* gi_cutter.c: Adapted to boundary halfedges
+
+2011-01-15  Christian Rau  <rauy@users.sourceforge.net>
+	* gim.c: Flipped zooming direction.
+	* gi_sampler.c (GISampler_sample_gl_fixed_function): fixed mapping from 
+	  gl to gi attributes.
+	* gi_sampler.c (GISampler_rasterize_triangle): cleaned up SSE code a bit.
+
+
+--- 2.0.1 release ---
+
+2011-01-14  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_memory.h: Added g_PersistentAlloc for persistent mesh data and 
+	  GI_MALLOC/CALLOC/FREE_PERSISTENT for wrapping this allocator, 
+	  GI_..._SINGLE macros now use g_SmallObjAlloc.
+	* gi_container.h: Added GI_LIST_DELETE/CLEAR_PERSISTENT using 
+	  GI_FREE_PERSISTENT instead of GI_FREE_SINGLE.
+	* gi_mesh.c: Substituted uses of ..._SINGLE by ..._PERSISTENT for all 
+	  persistent mesh elements.
+	* gi_cutter.c: Substituted uses of ..._SINGLE by ..._PERSISTENT for all 
+	  persistent mesh elements.
+	* gi_parameterizer.c: Substituted uses of ..._SINGLE by ..._PERSISTENT for 
+	  all persistent mesh elements.
+
+
+--- 2.0.0 release ---
+
+2011-01-12  Christian Rau  <rauy@users.sourceforge.net>
+	* <all files>: separated cutting and parameterization.
+	* <all files>: changed attribute system to more generic one.
+	* <all files>: added SSE support.
+	* <all files>: minor changes.
+	* gi_sampler.h: add texture support for software sampler.
+
+2009-06-01  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_parameterizer.h: Added struct GIParameterizer to wrap parameterization
+	  state. Changed functions to take parameterizer argument.
+	* gi_sampler.h: Added struct GISampler to wrap sampling state. Changed 
+	  functions to take sampler argument.
+	* gi_gl.h: Added struct GIRenderer to wrap render state.
+	* gi_context.h: Added member parameterizer, sampler and render to GIContext.
+	  Removed redundant members.
+
+2009-05-21  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_mesh.h: Added functions GIFace_area, GIFace_stretch and GIParam_stretch.
+	* gi_mesh.c (GIFace_area): Created function to compute area of a face.
+	* gi_mesh.c (GIFace_stretch): Created function to compute stretch of a face.
+	* gi_mesh.c (GIParam_stretch): Created function to compute stretch value of 
+	  a single param.
+	* gi_mesh.c (GIMesh_compute_stretch): Modified to use GIFace_stretch.
+
+2009-05-16  Christian Rau  <rauy@users.sourceforge.net>
+	* gi.h: Added macros GI_COMBINED_STRETCH and GI_AREA_WEIGHT.
+	* gi_context.h: Added meber area_eight to GIContext.
+	* gi_context.c: Added initialization and retrieval code for area_weight.
+	* gi_parameterizer.c (giParameterizerParameterf): Added code for seting
+	  GI_AREA_WEIGHT.
+	* gi_mesh.c (giGetMeshfv): Added retrieval code for GI_COMBINED_STRETCH.
+	* gi_mesh.c (GIMesh_compute_stretch): Added cases for computing combined 
+	  energy.
+
+
+--- 1.2.0 release ---
+
+2009-05-12  Christian Rau  <rauy@users.sourceforge.net>
+	* gi.h: Added macro GI_INVALID_PARAMETERIZATION.
+	* gi_context.c (giErrorString): Added case for new error code.
+	* gi_sampler.c (giSample): Modified function to return new error code if 
+	  GICut_find_corners returns GI_FALSE.
+
+2009-05-11  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_gl.c: Changed fragment shader used for rendering to support directional 
+	  light and two sided materials.
+	* gi_cut.h: Made GICut_find_corners return a boolean.
+	* gi_cut.c (GICut_find_corners): Modified function to also check for valid 
+	  boundary parameterization onto the unit square.
+
+2009-05-10  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cut.h: Added function GICut_find_corners
+	* gi_cut.c (GICut_find_corners): Created function for finding corners of 
+	  the parameter domain in existing parameterization.
+	* gi_sampler.c (giSample): Added code to check for corners and call 
+	  GICut_find_corners if neccessary.
+	* gi_parameterizer.c (giParameterize): Modifed function to reverse splits 
+	  when only reparameterizing the cut.
+
+2009-05-09  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_gl.c: Changed vertex and geometry shader used for rendering.
+	* gi_gl.c (giGLDrawGIM): Changed computation and setting of shader uniforms.
+
+
+--- 1.1.3 release ---
+
+2009-05-07  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_gl.c: Changed vertex and geometry shader used for rendering.
+
+2009-05-06  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_gl.h: Added members next and prev to GIGLGIMCache and removed priority.
+	* gi_gl.c (giGLDrawGIM): Changed render cache from array to doubly linked
+	  list and from frequency counting to move front heuristic.
+
+
+--- 1.1.2 release ---
+
+2009-05-05  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_parameterizer (GIParameterizer_arc_length_square): Changed function to
+	  split paths temporarily at corners.
+	* gi_cut.h: Added member split_hpaths to GICut. Added function 
+	  GICut_split_halfpath. Added function GICut_reverse_splits.
+	* gi_cut.c (GICut_split_halfpath): Created function for spliting half path.
+	* gi_cut.c (GICut_reverse_splits): Created function for reversing splits.
+	* gi_cut.h: Added corners member to GICut.
+	* gi_sampler.c (GISampler_sampler_software): Modified to test corners.
+
+2009-05-04  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_gl.c: Changed geometry shader related code to use EXT instead of ARB.
+	  Changed vertex and geometry shader.
+
+
+--- 1.1.1 release ---
+
+2009-05-04  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_parameterizer.c (GIParameterizer_gim): Changed shortest path to use 
+	  Dijkstra's algorithm.
+	* gi_parameterizer.c (GIParameterizer_arc_length_square): Added code to 
+	  check for param almost at corner.
+	* gi_sampler.h: Made set pixel functions to members of GIImage.
+	* gi_sampler.c (GISampler_sample_software): Added code to fuse cut.
+	* gi_image.c: Removed bug in set pixel functions.
+	* gi_image.h: Added function GIImage_border_to_image.
+	* gi_image.c (GIImage_border_to_image): Created function for converting
+	  1D-coordinate on image border to 2D-coordinate.
+
+
+--- 1.1.0 release ---
+
+2009-04-30  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cut.c (GICut_update_paths): Created function for computing path list
+	  and half path list.
+	* gi_cut.c: Added call to GICut_update_paths in constructors.
+	* gi_parameterizer.c (GIParameterizer_arc_length_square): Modified function
+	  to use precomputed path information.
+	* gi_cut.h: Added function GICut_copy.
+	* gi_cut.c (GICut_copy): Created function for deep copying a cut.
+	* gi_parameterizer.c (GIParameterizer_gim): Modifed function to use
+	  GICut_copy for saving cut.
+	* gi.h: Added constants GI_TOPOLOGICAL_SIDEBAND_LENGTH and GI_TOPOLOGICAL_SIDEBAND
+	* gi_mesh.c (giGetMeshiv): Added handlers for new constants to retrieve
+	  topological sideband.
+
+2009-04-29  Christian Rau  <rauy@users.sourceforge.net>
+	* gi_cut.h: modified GICutPath. Added GIHalfPath. Added members paths, 
+	  hpaths and path_count to GICut. Added function GICut_update_paths.
+	* gi_cut.c: Added initialization and destruction code for new members.
+	* gi_cut.c (GICut_destruct): Added check if mesh has params.
+	* gi_mesh.c (GIMesh_clear_params): Added call to GICut_destruct.
+
+
+--- 1.0.0 release ---

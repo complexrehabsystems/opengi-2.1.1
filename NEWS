@@ -1,0 +1,90 @@
+2.1.1
+-----
+
+- Fixed support for 2.1 constants in giGetEnumValue
+
+
+2.1.0
+-----
+
+- Catmull-Clark subdivision and patchification
+- Image sub-rectangles to support packing multiple patches into single image
+- Further reduced memory footprint of meshes
+- Fixed bug in extraction of user specified cut
+
+
+2.0.2
+-----
+
+- Fixed serious bug in memory allocator
+- Fixed serious bug in software sampler
+- Fixed minor bugs in hardware sampler
+- Fixed bug when sourcing parameter coordinates from vertex positions
+
+
+2.0.1
+-----
+
+- Massively reduced memory footprint due to customized memory allocator
+
+
+2.0.0
+-----
+
+- Major interface changes
+- New generic attribute system, away from fixed attribute semantics
+- Cutting decoupled from parameterization
+- Support for multi-chart patchifications
+- Support for resampling of 1D, 2D, 3D and cube map textures in both hardware 
+  and software sampler
+- much more precise hardware sampler (but still not beating software mode)
+- new stretch metric accounting for angle and area distortion
+- Support for SSE instructions for accelerating parameterization and sampling
+
+
+1.2.0
+-----
+
+- Added new error code for invalid parameterization, thrown when trying to 
+  sample a mesh not parameterized onto the unit square.
+- Geometry image rendering now supports two sided materials and directional
+  lights
+- Completely fixed geometry shader based rendering when using vertex texturing
+  or multi-resolution rendering
+- Fixed bug, that assigned GI_NO_ERROR the same value as GI_INVALID_ENUM
+
+
+1.1.3
+-----
+
+- Increased render cache performance
+- Fixed bugs occuring when retrieving render parameters
+- Further fixed geometry shader rendering
+
+
+1.1.2
+-----
+
+- Fixed bug that could make parameterization unsolvable
+- Fixed geometry shader rendering
+
+
+1.1.1
+-----
+
+- Fixed bug that could make parameterization unsolvable
+- Fixed bug occuring when software sampling into RAM or buffer
+
+
+1.1.0
+-----
+
+- Topological sideband can be retrived
+
+
+1.0.0
+-----
+
+- First release
+- Bug: GIM algorithm not working on closed meshes?
+- Bug: giGetIndexedMesh creating heap corruption?
