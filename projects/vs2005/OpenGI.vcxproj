@@ -45,6 +45,7 @@
     <OutDir>$(ProjectDir)/../../bin\</OutDir>
     <IntDir>$(ProjectDir)/Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)/../../bin\</OutDir>

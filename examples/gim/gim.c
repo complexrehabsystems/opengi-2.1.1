@@ -53,6 +53,7 @@ int iWireframe = 0, iDrawMesh = 1, iParam = 0, iFPS = 0;
 
 void initGL();
 unsigned int create_mesh(const char *filename);
+unsigned int create_mesh_obj (const char *filename);
 int cut_mesh(unsigned int mesh);
 int parameterize_mesh(unsigned int mesh, int res);
 int create_gim(unsigned int *gim, int res);
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
 	giMakeCurrent(pContext);
 	giErrorCallback(errorCB, NULL);
 	printf("creating mesh...\n");
-	if(!(uiMesh = create_mesh(argv[f])))
+	if(!(uiMesh = create_mesh_obj(argv[f])))
 	{
 		fprintf(stderr, "mesh creation failed!\n");
 		return -1;
@@ -205,6 +206,133 @@ void initGL()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 256, 256, 0, 
 		GL_LUMINANCE, GL_UNSIGNED_BYTE, checkerboard);
+}
+
+unsigned int create_mesh_obj (const char *filename)
+{
+  unsigned int uiMesh;
+  FILE *pFile = fopen (filename, "r");
+  float *pVertices, *pNormals;
+  unsigned int *pIndices;
+  int iNumVertices, iNumIndices;
+
+  if (!pFile)
+  {
+    fprintf (stderr, "cannot open file!\n");
+    return 0;
+  }
+
+  char line[256];
+  float x, y, z;
+  float r, g, b;
+  int i1, i2, i3, in1, in2, in3;
+
+  iNumVertices = 0;
+  iNumIndices = 0;
+
+  while (fgets (line, 256, pFile))
+  {
+    if (strlen (line) == 0)
+    {
+      continue;
+    }
+
+    if (line[0] == 'v')
+    {
+      // normal
+      if (line[1] == 'n')
+      {
+      }
+      else
+      {
+        iNumVertices++;
+      }
+    }
+    else if (line[0] == 'f')
+    {
+      iNumIndices++;
+    }
+  }
+
+  iNumVertices *= 3;
+  iNumIndices *= 3;
+  pVertices = (float*)malloc (iNumVertices * sizeof (float));
+  pNormals = (float*)calloc (iNumVertices, sizeof (float));
+  pIndices = (unsigned int*)malloc (iNumIndices * sizeof (unsigned int));
+
+  fseek (pFile, 0, SEEK_SET);
+
+  int vertexIndex = 0;
+  int normalIndex = 0;
+  int faceIndex = 0;
+
+  while (fgets (line, 256, pFile))
+  {
+    if (strlen (line) == 0)
+    {
+      continue;
+    }
+
+    if (line[0] == 'v')
+    {
+      // normal
+      if (line[1] == 'n')
+      {
+        sscanf_s (line, "vn %f %f %f", &x, &y, &z);
+        pNormals[normalIndex + 0] = x;
+        pNormals[normalIndex + 1] = y;
+        pNormals[normalIndex + 2] = z;
+        normalIndex += 3;
+      }
+      else
+      {
+        sscanf (line, "v %f %f %f %f %f %f", &x, &y, &z, &r, &g, &b);
+        pVertices[vertexIndex + 0] = x/1000;
+        pVertices[vertexIndex + 1] = y/1000;
+        pVertices[vertexIndex + 2] = z/1000;
+        vertexIndex += 3;
+      }
+    }
+    else if (line[0] == 'f')
+    {
+      sscanf (line, "f %d//%d %d//%d %d//%d", &i1, &in1, &i2, &in2, &i3, &in3);
+      pIndices[faceIndex + 0] = i1 - 1;
+      pIndices[faceIndex + 1] = i2 - 1;
+      pIndices[faceIndex + 2] = i3 - 1;
+      faceIndex += 3;
+    }
+  }
+  fclose (pFile);
+
+  /* normalize vertex normals */
+  for (int i = 0; i<iNumVertices; i += 3)
+    VEC3_NORMALIZE (pNormals + i);
+
+
+  /* set attribute arrays */
+  giBindAttrib (GI_POSITION_ATTRIB, 0);
+  giBindAttrib (GI_PARAM_ATTRIB, 2);
+  giAttribPointer (0, 3, GI_FALSE, 0, pVertices);
+  giAttribPointer (1, 3, GI_TRUE, 0, pNormals);
+  giEnableAttribArray (0);
+  giEnableAttribArray (1);
+
+  /* create mesh */
+  uiMesh = giGenMesh ();
+  giBindMesh (uiMesh);
+  giGetError ();
+  giIndexedMesh (0, iNumVertices - 1, iNumIndices, pIndices);
+
+  /* clean up */
+  free (pVertices);
+  free (pNormals);
+  free (pIndices);
+
+  int err = giGetError ();
+  if (err != GI_NO_ERROR)
+    return 0;
+
+  return uiMesh;  
 }
 
 /* read PLY2 file and create OpenGI mesh */
